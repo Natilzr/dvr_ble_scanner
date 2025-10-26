@@ -1,0 +1,13 @@
+SCC = This is a Source Code Control file
+
+[BleScanner.dsp]
+SCC_Aux_Path = "\\SRV2008\SourceSafe\VSS2014"
+SCC_Project_Name = "$/AckPlatforms/CortexPlat/BleScanner", WRCBAAAA
+
+[BleScanner.sln]
+SCC_Aux_Path = "\\SRV2008\SourceSafe\VSS2014"
+SCC_Project_Name = "$/AckPlatforms/CortexPlat/BleScanner", WRCBAAAA
+
+[BleScanner.vcproj]
+SCC_Aux_Path = "\\SRV2008\SourceSafe\VSS2014"
+SCC_Project_Name = "$/AckPlatforms/CortexPlat/BleScanner", WRCBAAAA

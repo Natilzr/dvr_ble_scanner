@@ -1,0 +1,20 @@
+First implementation
+
+Used memory:
+
+flash: 22 KB of 128 KBytes
+SRAM: of 12,53 KB (including 3K stack) of 16KBytes
+
+
+Labeled as BleScanner ver.1.00 11/03/2019
+==================
+
+TRACE_VERSION (disabled): 
+When enabled:
+	added traces
+	On Start: get and trace BLE version (e.g., from debugger, BLE Core 4.1 HW3.1 FW7.1e)
+	The BLE reports to serial ports are disabled
+	
+Labeled as BleScanner ver.1.00 test 12/03/2019
+==================
+
