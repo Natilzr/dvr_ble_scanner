@@ -59,7 +59,7 @@ typedef struct {
 
 #define TEXT_BUFFER_SIZE 50
 
-extern uint8_t textbuf[50];
+extern uint8_t textbuf[60];
 extern DevicesSort DeviceTable[DEVICE_TABLE_SIZE];
 
 uint16_t  PrintMsg(uint16_t cnt);

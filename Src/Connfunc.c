@@ -23,7 +23,7 @@ extern ERROR_STATUS    S_Error,St_Error;
 extern uint16_t MsgCnt;
 extern uint8_t RunState;
 extern processt t_process;
-extern uint8_t textbuf[50];
+extern uint8_t textbuf[60];
 extern  uint8_t TempMac[6];
 extern uint16_t My_Con_Handle;
 extern uint32_t TempAge;

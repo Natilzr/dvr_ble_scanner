@@ -134,12 +134,12 @@ ReadStruct Readbuf;
 uint8_t show_cnt;
 //uint8_t hexbuffer[100];
 uint32_t Len = 0;
-uint8_t textbuf[50];
+uint8_t textbuf[60];
 uint8_t Rbuf[RBUF_SIZE];
 uint8_t table_l=0;
 uint8_t Resend,LEDDelay;
 uint32_t LoopDelayCnt;
-uint8_t PrintCnt;
+uint16_t PrintCnt;
 uint16_t DelayCnt;
 uint16_t TickCnt;
 extern uint32_t TickCount;
@@ -445,7 +445,11 @@ void User_Process(void)
           {
             TestStatus=SendSer;
   //          DeviceCount = table_l;
+#ifndef SENDT_TEST
             table_l = DeviceCount ;
+#else
+            table_l = 1000;
+#endif
             HAL_GPIO_WritePin(LED_Green_GPIO_Port,LED_Green_Pin, GPIO_PIN_RESET);
             Flags &= ~Sec_10;
             Flags |= TX_flag;//set tx flag
@@ -465,13 +469,14 @@ void User_Process(void)
           break;
         }
         memset(textbuf,'\0',sizeof(textbuf));
-        MsgLen = PrintDVRMsg(PrintCnt);
+        //MsgLen = PrintDVRMsg(PrintCnt);//changes inside
+        MsgLen = PrintMsg(PrintCnt);//changes inside
 #ifdef TRACE_VERSION
         if (!trace_flag)
 #endif
         WriteSerial(COM1,(char*)textbuf,MsgLen);
         PrintCnt++;
-        DelayCnt = 80;
+        DelayCnt = 2000;
         TestStatus = SendDelay;
         break;
       case SendDelay:

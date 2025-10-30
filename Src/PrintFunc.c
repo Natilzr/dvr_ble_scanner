@@ -8,8 +8,8 @@
 #include "printfunc.h"
 
 
-#define STX 0x02
-#define ETX 0x03
+#define STX '@'//0x02
+#define ETX '#'//0x03
 #define CDPD_SLIP_ESCAPED_STX		0xd2
 #define CDPD_SLIP_ESCAPED_ETX		0xd3
 #define CDPD_SLIP_ESCAPE		0xdb
@@ -57,6 +57,7 @@ uint16_t  PrintMsg(uint16_t cnt)
         float                   Temp;
         uint8_t                 T1,T2;
         int16_t                 Temp16;
+        uint16_t                tmpcnt;
         uint16_t                batt;
         uint16_t                pres;
         uint16_t                   ConvT,DeltaT;
@@ -65,9 +66,15 @@ uint16_t  PrintMsg(uint16_t cnt)
         uint16_t                TagMask;
         SensorData              kbprodata;
         uint8_t                 Hy[2];
+        tmpcnt = cnt;
+        cnt = 0;
+        au8Data[u8Data++] = 'W';
+        au8Data[u8Data++] = 'L';
+        au8Data[u8Data++] = 'I';
+        au8Data[u8Data++] = 0;//lenght high
         au8Data[u8Data++] = 34;//lenght low
-        au8Data[u8Data++] = 0x00;//lenght high
-        au8Data[u8Data++] = cnt;//seq  
+        au8Data[u8Data++] = (tmpcnt >> 8 )& 0xff)   ;//cnt;//seq  
+        au8Data[u8Data++] = tmpcnt & 0xff;//cnt;//seq 
         au8Data[u8Data++] = PACKET_TYPE_BEACON;
  
         au8Data[u8Data++] = (uint8_t)((ScanDevices[cnt].i64Addr >>  40) & 0xff);
@@ -322,7 +329,8 @@ uint16_t  PrintMsg(uint16_t cnt)
             }
         }
 
-        au8Data[0] = u8Data - 3 ;//2 bytes len + 00 - checksum// PacketType
+//        au8Data[0] = u8Data - 3 ;//2 bytes len + 00 - checksum// PacketType
+          au8Data[3] = u8Data - 3 ;//2 bytes len + 00 - checksum// PacketType
       	u32Checksum = u32Alder(&au8Data[3],
 				au8Data[0],
 				&a,&b);
@@ -335,8 +343,15 @@ uint16_t  PrintMsg(uint16_t cnt)
 	au8Data[u8Data++] = (uint8_t)((u32Checksum >> 24) & 0xff);
 
 	// cerate output frame
-	textbuf[u8Len++] = STX;
+#if 0
+        textbuf[u8Len++] = '@';
+        textbuf[u8Len++] = 'W';
+        textbuf[u8Len++] = 'L';
+        textbuf[u8Len++] = 'I';
+#endif        
+        textbuf[u8Len++] = STX;
 	for (u8Pos = 0; u8Pos < u8Data; u8Pos++)
+//        for (u8Pos = 1; u8Pos < u8Data; u8Pos++)
 	{
 		switch(au8Data[u8Pos])
 		{
@@ -370,7 +385,7 @@ uint16_t  PrintDVRMsg(uint16_t cnt)
 	uint8_t 		u8Data = 0;
 	uint16_t 		u8Len = 0;
 	uint8_t                 u8Pos;
-
+        uint16_t                tmpcnt;
         float                   Temp;
         int8_t                  temp1,temp2;
         int16_t                 shTemp;
@@ -382,7 +397,8 @@ uint16_t  PrintDVRMsg(uint16_t cnt)
         ReadDateTimeFromRTC(&DateTime[0],&DateTime[1], &DateTime[2],
                         &DateTime[3],&DateTime[4],&DateTime[5]);
             // Format: YYYY/MM/DDThh:mm:ss
-
+        tmpcnt = cnt;
+        cnt = 0;
         uint64_to_ascii12_manual(UNIT_ID,UUbuffer);
         SData                   SDData;
          SDData.mac[0] = (uint8_t)((ScanDevices[cnt].i64Addr >>  40) & 0xff);
@@ -395,6 +411,12 @@ uint16_t  PrintDVRMsg(uint16_t cnt)
         au8Data[u8Data++]='W';
         au8Data[u8Data++]='L';
         au8Data[u8Data++]='I';
+        au8Data[u8Data++]=',';
+        memset(tbuffer,0,10);
+        sprintf(tbuffer, "%d", tmpcnt);
+        for (uint8_t i = 0; i < 4 && tbuffer[i]!= 0; i++) {
+        au8Data[u8Data++] = (uint8_t)tbuffer[i];
+        }
         au8Data[u8Data++]=',';
         au8Data[u8Data++]='0';
         au8Data[u8Data++]='3';
